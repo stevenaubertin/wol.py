@@ -67,6 +67,7 @@ def parse_args(argv):
 
     if not mac:
         help_message()
+        sys.exit(0)
 
     return ip, port, mac, verbose
 
