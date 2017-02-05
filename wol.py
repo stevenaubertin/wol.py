@@ -6,6 +6,19 @@ import getopt
 import array
 
 
+def help_message():
+    print """Name
+                wol.py
+
+             Description
+                Send the Wake-on-LAN magic packet on the network to wake sleeping computer
+
+             SYNTAX
+                python wol.py -m <mac_address> [-i <broadcast ip address>] [-p <port>] [-v <verbose>] [-h <help message>]
+
+             """
+
+
 def get_wol_ports():
     return [0, 7, 9]
 
@@ -28,7 +41,11 @@ def parse_args(argv):
     mac = None
     verbose = False
 
-    options, remainder = getopt.getopt(argv, 'm:i:p:v', ['mac=', 'ip=', 'port=', 'verbose='])
+    if len(argv) == 0:
+        help_message()
+        sys.exit(0)
+
+    options, remainder = getopt.getopt(argv, 'm:i:p:vh', ['mac=', 'ip=', 'port=', 'verbose=', 'help='])
     for opt, arg in options:
         if opt in ('-m', '--mac'):
             if len(arg.split(':')) != 6 and filter(lambda x: len(str(x)) != 2, arg.split(':')):
@@ -44,9 +61,12 @@ def parse_args(argv):
             port = arg
         elif opt in ('-v', '--verbose'):
             verbose = True
+        elif opt in ('-h', '--help'):
+            help_message()
+            sys.exit(0)
 
     if not mac:
-        print 'Error : a mac address should be specified'
+        help_message()
 
     return ip, port, mac, verbose
 
