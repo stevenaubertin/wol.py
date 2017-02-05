@@ -37,5 +37,10 @@ python wol.py -m 1c:1b:04:55:4a:00 -v
 #Specify the port to use with -p by default it's 9
 python wol.py -m 1c:1b:04:55:4a:00 -p 9
 ```
+```
+#Print help message
+python wol.py -h
+python wol.py
+```
 
 #### License [MIT](LICENSE)
