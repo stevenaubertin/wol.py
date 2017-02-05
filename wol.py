@@ -32,7 +32,7 @@ def parse_args(argv):
     for opt, arg in options:
         if opt in ('-m', '--mac'):
             if len(arg.split(':')) != 6 and filter(lambda x: len(str(x)) != 2, arg.split(':')):
-                print 'mac should be formatted like', mac
+                print 'mac should be formatted like', get_mac('eth0')
                 return 2
             mac = arg
         elif opt in ('-i', '--ip'):
@@ -44,6 +44,9 @@ def parse_args(argv):
             port = arg
         elif opt in ('-v', '--verbose'):
             verbose = True
+
+    if not mac:
+        print 'Error : a mac address should be specified'
 
     return ip, port, mac, verbose
 
