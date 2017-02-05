@@ -36,7 +36,7 @@ def parse_args(argv):
     for opt, arg in options:
         if opt in ('-m', '--mac'):
             if len(arg.split(':')) != 6 and filter(lambda x: len(str(x)) != 2, arg.split(':')):
-                print 'mac should be formated like', mac
+                print 'mac should be formatted like', mac
                 return 2
             mac = arg
         elif opt in ('-i', '--ip'):
