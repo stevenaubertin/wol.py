@@ -7,16 +7,17 @@ import array
 
 
 def help_message():
-    print """Name
-                wol.py
+    print """
+    Name
+        wol.py
 
-             Description
-                Send the Wake-on-LAN magic packet on the network to wake sleeping computer
+    Description
+        Send the Wake-on-LAN magic packet on the network to wake sleeping computer
 
-             SYNTAX
-                python wol.py -m <mac_address> [-i <broadcast ip address>] [-p <port>] [-v <verbose>] [-h <help message>]
+    SYNTAX
+        python wol.py -m <mac_address> [-i <broadcast ip address>] [-p <port>] [-v <verbose>] [-h <help message>]
 
-             """
+    """
 
 
 def get_wol_ports():
