@@ -18,4 +18,24 @@ cd wol.py
 python wol.py -m 1c:1b:04:55:4a:00
 ```
 
+### There is other command line arguments that can be used:
+```
+#Specify the mac address with -m
+#This is required
+python wol.py -m 1c:1b:04:55:4a:00
+```
+```
+#Specify the broadcast ip address with -i
+#By default it's 192.168.0.255
+python wol.py -i 192.168.0.255 -m 1c:1b:04:55:4a:00
+```
+```
+#For verbosity use -v
+python wol.py -m 1c:1b:04:55:4a:00 -v 
+```
+```
+#Specify the port to use with -p by default it's 9
+python wol.py -m 1c:1b:04:55:4a:00 -p 9
+```
+
 #### License [MIT](LICENSE)
