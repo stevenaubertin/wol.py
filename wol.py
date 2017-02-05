@@ -6,10 +6,6 @@ import getopt
 import array
 
 
-def get_ip():
-    return socket.gethostbyname(socket.gethostname())
-
-
 def get_wol_ports():
     return [0, 7, 9]
 
