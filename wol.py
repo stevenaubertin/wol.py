@@ -5,21 +5,26 @@ import fcntl
 import getopt
 import array
 
+
 def get_ip():
     return socket.gethostbyname(socket.gethostname())
 
+
 def get_wol_ports():
     return [0, 7, 9]
+
 
 def get_mac(ifname):
     s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     info = fcntl.ioctl(s.fileno(), 0x8927, struct.pack('256s', ifname[:15]))
     return ':'.join(['%02x:' % ord(char) for char in info[18:24]])[:-1]
 
+
 def build_payload(mac):
     ffs = [0xff] * 6
     macs = map(lambda x: int(x, 16), mac.split(':')) * 16
     return array.array('B', ffs + macs)
+
 
 def parse_args(argv):
     ip = '192.168.0.255'
@@ -46,20 +51,23 @@ def parse_args(argv):
 
     return ip, port, mac, verbose
 
+
 def send(payload, ip, port):
     sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
     sock.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
     sock.sendto(payload, (ip, port))
 
+
 def main(argv):
     ip, port, mac, verbose = parse_args(argv)
 
     payload = build_payload(mac)
 
-    if verbose: print 'Mac  :', mac
-    if verbose: print 'Ip   :', ip
-    if verbose: print 'Port :', port
+    if verbose:
+        print 'Mac  :', mac
+        print 'Ip   :', ip
+        print 'Port :', port
 
     send(payload, ip, port)
 
