@@ -82,15 +82,13 @@ def send(payload, ip, port):
 
 def main(argv):
     ip, port, mac, verbose = parse_args(argv)
-
     payload = build_payload(mac)
-
     if verbose:
         print 'Mac  :', mac
         print 'Ip   :', ip
         print 'Port :', port
-
     send(payload, ip, port)
+    return 0
 
 if __name__ == "__main__":
     sys.exit(main(sys.argv[1:]))
