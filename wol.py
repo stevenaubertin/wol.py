@@ -67,6 +67,7 @@ def parse_args(argv):
             sys.exit(0)
 
     if not mac:
+        print 'Mac address is required'
         help_message()
         sys.exit(0)
 
