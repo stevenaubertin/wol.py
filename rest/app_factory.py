@@ -17,19 +17,19 @@ def create_app(name, config='config.ProductionConfig'):
     )
 
     if 'LOG_LEVEL' in app.config:
-        if app.config['LOG_LEVEL'] == 'INFO':
-            handler.setLevel(logging.INFO)
-        elif app.config['LOG_LEVEL'] == 'CRITICAL':
-            handler.setLevel(logging.CRITICAL)
-        elif app.config['LOG_LEVEL'] == 'DEBUG':
-            handler.setLevel(logging.DEBUG)
-        elif app.config['LOG_LEVEL'] == 'ERROR':
-            handler.setLevel(logging.ERROR)
-        elif app.config['LOG_LEVEL'] == 'FATAL':
-            handler.setLevel(logging.FATAL)
-        else:
-            handler.setLevel(logging.INFO)
-            print 'No "LOG_LEVEL" found defaulting to "INFO"'
+        for level in app.config['LOG_LEVEL']:
+            if level == 'INFO':
+                handler.setLevel(logging.INFO)
+            elif level == 'CRITICAL':
+                handler.setLevel(logging.CRITICAL)
+            elif level == 'DEBUG':
+                handler.setLevel(logging.DEBUG)
+            elif level == 'ERROR':
+                handler.setLevel(logging.ERROR)
+            elif level == 'FATAL':
+                handler.setLevel(logging.FATAL)
+            else:
+                raise Exception('Invalid logging level')
     else:
         handler.setLevel(logging.INFO)
         print 'No "LOG_LEVEL" found defaulting to "INFO"'

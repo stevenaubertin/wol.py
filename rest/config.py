@@ -4,7 +4,7 @@ class Config(object):
     LOG_FILENAME = 'wol.log'
     LOG_MAX_BYTES = 10000
     LOG_BACKUP_COUNT = 1
-    LOG_LEVEL = 'INFO'
+    LOG_LEVEL = ['INFO', 'ERROR']
 
 
 class ProductionConfig(Config):
