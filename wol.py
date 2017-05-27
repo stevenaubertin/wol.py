@@ -5,7 +5,7 @@ import array
 
 
 def help_message():
-    print """
+    return """
     Name
         wol.py
 
@@ -35,7 +35,7 @@ def parse_args(argv):
     verbose = False
 
     if len(argv) == 0:
-        help_message()
+        print help_message()
         sys.exit(0)
 
     options, remainder = getopt.getopt(argv, 'm:i:p:vh', ['mac=', 'ip=', 'port=', 'verbose=', 'help='])
@@ -55,12 +55,12 @@ def parse_args(argv):
         elif opt in ('-v', '--verbose'):
             verbose = True
         elif opt in ('-h', '--help'):
-            help_message()
+            print help_message()
             sys.exit(0)
 
     if not mac:
         print 'Mac address is required'
-        help_message()
+        print help_message()
         sys.exit(0)
 
     return ip, port, mac, verbose
