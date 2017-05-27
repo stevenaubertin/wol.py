@@ -1,7 +1,5 @@
 import sys
 import socket
-import struct
-import fcntl
 import getopt
 import array
 
@@ -24,12 +22,6 @@ def get_wol_ports():
     return [0, 7, 9]
 
 
-def get_mac(ifname):
-    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    info = fcntl.ioctl(s.fileno(), 0x8927, struct.pack('256s', ifname[:15]))
-    return ':'.join(['%02x:' % ord(char) for char in info[18:24]])[:-1]
-
-
 def build_payload(mac):
     ffs = [0xff] * 6
     macs = map(lambda x: int(x, 16), mac.split(':')) * 16
@@ -50,7 +42,7 @@ def parse_args(argv):
     for opt, arg in options:
         if opt in ('-m', '--mac'):
             if len(arg.split(':')) != 6 and filter(lambda x: len(str(x)) != 2, arg.split(':')):
-                print 'mac should be formatted like', get_mac('eth0')
+                print 'mac should be formatted like', '01:23:45:67:89:ab'
                 return 2
             mac = arg
         elif opt in ('-i', '--ip'):
