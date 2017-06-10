@@ -1,4 +1,7 @@
+# -*- coding: utf-8 -*-
+
 class Config(object):
+    """Base class for configuration"""
     DEBUG = False
     TESTING = False
     LOG_FILENAME = 'wol.log'
@@ -8,13 +11,16 @@ class Config(object):
 
 
 class ProductionConfig(Config):
+    """Production configuration"""
     pass
 
 
 class DevelopmentConfig(Config):
+    """Development configuration"""
     DEBUG = True
     LOG_LEVEL = 'DEBUG'
 
 
 class TestingConfig(Config):
+    """Testing configuration"""
     TESTING = True
