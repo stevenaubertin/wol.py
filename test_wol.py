@@ -245,7 +245,7 @@ class TestSend:
             )
             mock_sock.sendto.assert_called_once_with(payload, (IP_BCAST, 9))
 
-    def test_error_propagates(self):
+    def test_error_prints_and_exits(self):
         payload = build_payload(MAC_LOWER)
         with patch("wol.socket.socket") as mock_socket_cls:
             mock_sock = MagicMock()
@@ -253,5 +253,6 @@ class TestSend:
             mock_sock.__enter__.return_value = mock_sock
             mock_sock.sendto.side_effect = OSError("network error")
 
-            with pytest.raises(OSError, match="network error"):
+            with pytest.raises(SystemExit) as exc_info:
                 send(payload, IP_BCAST, 9)
+            assert exc_info.value.code == 1

@@ -133,6 +133,9 @@ def send(payload, ip, port):
         sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         sock.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
         sock.sendto(payload, (ip, port))
+    except Exception:
+        print('Unable to send packet to given MAC address')
+        sys.exit(1)
     finally:
         sock.close()
 
