@@ -2,45 +2,102 @@
 
 ## Synopsis
 
-Application that sends the [Wake-on-LAN](https://en.wikipedia.org/wiki/Wake-on-LAN) magic packet to a computer in order to wake him up from slumber.
+A Python 3 CLI that sends the [Wake-on-LAN](https://en.wikipedia.org/wiki/Wake-on-LAN) magic packet over UDP broadcast to wake a sleeping computer.
 
-## To Use
+## Requirements
 
-Clone this repository and run the python script (wol.py) with the mac address of the target.
-From your command line:
+- Python 3.9+
+- Node.js (for Husky pre-commit hooks)
+
+## Usage
+
+Clone this repository and run `wol.py` with the MAC address of the target:
 
 ```bash
 # Clone this repository
 git clone https://github.com/stevenaubertin/wol.py
-# Go into the repository
 cd wol.py
+
 # Run the app
-python wol.py -m 1c:1b:04:55:4a:00
+python wol.py -m AA:BB:CC:DD:EE:FF
 ```
 
-### There is other command line arguments that can be used:
+### Options
+
+| Flag | Description | Default |
+|------|-------------|---------|
+| `-m` | MAC address (required) | — |
+| `-i` | Broadcast IP address | `255.255.255.255` |
+| `-p` | Port (`0`, `7`, or `9`) | `9` |
+| `-v` | Verbose output | off |
+| `-h` | Show help message | — |
+
+### Examples
+
 ```bash
-# Specify the mac address with -m
-# This is required
-python wol.py -m 1c:1b:04:55:4a:00
-```
-```bash
-# Specify the broadcast ip address with -i
-# By default it's 192.168.0.255
-python wol.py -i 192.168.0.255 -m 1c:1b:04:55:4a:00
-```
-```bash
-# For verbosity use -v
-python wol.py -m 1c:1b:04:55:4a:00 -v 
-```
-```bash
-# Specify the port to use with -p by default it's 9
-python wol.py -m 1c:1b:04:55:4a:00 -p 9
-```
-```bash
-# Print help message
+# Basic usage
+python wol.py -m AA:BB:CC:DD:EE:FF
+
+# Specify broadcast IP and port
+python wol.py -m AA:BB:CC:DD:EE:FF -i 192.168.1.255 -p 7
+
+# Verbose output
+python wol.py -m AA:BB:CC:DD:EE:FF -v
+
+# Show help
 python wol.py -h
-python wol.py
 ```
 
-#### License [MIT](LICENSE)
+### Pre-flight Validation
+
+Before sending the magic packet, the following checks are performed:
+
+- **MAC address** — must be six colon-separated hex octets (e.g. `AA:BB:CC:DD:EE:FF`)
+- **IP address** — must be a valid IPv4 address
+- **Port** — must be one of `0`, `7`, or `9`
+
+Invalid inputs raise a clear error message and the packet is not sent.
+
+## Development
+
+### Setup
+
+```bash
+# Create and activate a virtual environment
+python -m venv .venv
+
+# Windows
+.venv\Scripts\Activate.ps1
+
+# Linux / macOS
+source .venv/bin/activate
+
+# Install dev dependencies
+pip install -r requirements-dev.txt
+
+# Install Husky pre-commit hooks
+npm install
+```
+
+### Running Tests
+
+```bash
+python -m pytest test_wol.py -v
+```
+
+### Linting
+
+```bash
+python -m flake8 . --exclude=.venv,node_modules
+```
+
+### Pre-commit Hooks
+
+Husky runs the following checks before each commit:
+
+1. **flake8** — blocks on syntax errors and undefined names
+2. **pytest** — blocks if any test fails
+
+## License
+
+[MIT](LICENSE)
