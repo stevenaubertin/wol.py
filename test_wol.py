@@ -226,6 +226,23 @@ class TestParseArgs:
             parse_args(["-v"])
         assert exc_info.value.code == 2
 
+    def test_long_mac_option(self):
+        ip, port, mac, verbose = parse_args(["--mac", MAC_LOWER])
+        assert mac == MAC_LOWER
+
+    def test_long_ip_option(self):
+        subnet = '.'.join(['192', '168', '1', '255'])
+        ip, port, mac, verbose = parse_args(["--mac", MAC_LOWER, "--ip", subnet])
+        assert ip == subnet
+
+    def test_long_port_option(self):
+        ip, port, mac, verbose = parse_args(["--mac", MAC_LOWER, "--port", "7"])
+        assert port == 7
+
+    def test_long_verbose_option(self):
+        ip, port, mac, verbose = parse_args(["--mac", MAC_LOWER, "--verbose"])
+        assert verbose is True
+
 
 class TestSend:
     def test_sends_payload(self):
