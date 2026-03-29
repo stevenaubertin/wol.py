@@ -1,0 +1,24 @@
+{
+  "name": "wol.py",
+  "version": "1.0.0",
+  "description": "Application that sends the [Wake-on-LAN](https://en.wikipedia.org/wiki/Wake-on-LAN) magic packet to a computer in order to wake him up from slumber.",
+  "scripts": {
+    "test": "python -m pytest test_wol.py -q",
+    "prepare": "husky"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/stevenaubertin/wol.py.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/stevenaubertin/wol.py/issues"
+  },
+  "homepage": "https://github.com/stevenaubertin/wol.py#readme",
+  "devDependencies": {
+    "husky": "^9.1.7"
+  }
+}
