@@ -14,7 +14,7 @@ def help_message():
         Send the Wake-on-LAN magic packet on the network to wake sleeping computer
 
     SYNTAX
-        python wol.py -m <mac_address> [-i <broadcast ip address>] [-p <port>] [-v <verbose>] [-h <help message>]
+        python wol.py -m, --mac <mac_address> [-i, --ip <broadcast ip address>] [-p, --port <port>] [-v, --verbose <verbose>] [-h, --help <help message>]
 
     """
 
@@ -144,6 +144,9 @@ def send(payload, ip, port):
         sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         sock.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
         sock.sendto(payload, (ip, port))
+    except:
+    	print('Unable to send packet to given MAC address')
+    	sys.exit(0)
     finally:
         sock.close()
 
