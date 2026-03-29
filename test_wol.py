@@ -4,9 +4,9 @@ import pytest
 from unittest.mock import patch, MagicMock
 
 from wol import (
+    DESCRIPTION,
     build_payload,
     get_wol_ports,
-    help_message,
     parse_args,
     preflight,
     send,
@@ -185,11 +185,9 @@ class TestGetWolPorts:
         assert get_wol_ports() == [0, 7, 9]
 
 
-class TestHelpMessage:
-    def test_contains_usage(self):
-        msg = help_message()
-        assert "wol.py" in msg
-        assert "mac_address" in msg
+class TestDescription:
+    def test_contains_description(self):
+        assert "Wake-on-LAN" in DESCRIPTION
 
 
 class TestParseArgs:
@@ -214,16 +212,19 @@ class TestParseArgs:
             parse_args(["-m", "not-a-mac"])
 
     def test_no_args_exits(self):
-        with pytest.raises(SystemExit):
+        with pytest.raises(SystemExit) as exc_info:
             parse_args([])
+        assert exc_info.value.code == 2
 
     def test_help_flag_exits(self):
-        with pytest.raises(SystemExit):
+        with pytest.raises(SystemExit) as exc_info:
             parse_args(["-h"])
+        assert exc_info.value.code == 0
 
     def test_missing_mac_exits(self):
-        with pytest.raises(SystemExit):
+        with pytest.raises(SystemExit) as exc_info:
             parse_args(["-v"])
+        assert exc_info.value.code == 2
 
 
 class TestSend:
@@ -232,6 +233,7 @@ class TestSend:
         with patch("wol.socket.socket") as mock_socket_cls:
             mock_sock = MagicMock()
             mock_socket_cls.return_value = mock_sock
+            mock_sock.__enter__.return_value = mock_sock
 
             send(payload, IP_BCAST, 9)
 
@@ -242,16 +244,14 @@ class TestSend:
                 _socket.SOL_SOCKET, _socket.SO_BROADCAST, 1,
             )
             mock_sock.sendto.assert_called_once_with(payload, (IP_BCAST, 9))
-            mock_sock.close.assert_called_once()
 
-    def test_socket_closed_on_error(self):
+    def test_error_propagates(self):
         payload = build_payload(MAC_LOWER)
         with patch("wol.socket.socket") as mock_socket_cls:
             mock_sock = MagicMock()
             mock_socket_cls.return_value = mock_sock
+            mock_sock.__enter__.return_value = mock_sock
             mock_sock.sendto.side_effect = OSError("network error")
 
-            with pytest.raises(OSError):
+            with pytest.raises(OSError, match="network error"):
                 send(payload, IP_BCAST, 9)
-
-            mock_sock.close.assert_called_once()

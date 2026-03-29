@@ -1,22 +1,13 @@
 import sys
 import socket
-import getopt
+import argparse
 import array
 import re
 
 
-def help_message():
-    return """
-    Name
-        wol.py
-
-    Description
-        Send the Wake-on-LAN magic packet on the network to wake sleeping computer
-
-    SYNTAX
-        python wol.py -m <mac_address> [-i <broadcast ip address>] [-p <port>] [-v <verbose>] [-h <help message>]
-
-    """
+DESCRIPTION = (
+    "Send the Wake-on-LAN magic packet on the network to wake a sleeping computer."
+)
 
 
 def get_wol_ports():
@@ -104,35 +95,33 @@ def build_payload(mac):
 
 
 def parse_args(argv):
-    ip = '255.255.255.255'
-    port = get_wol_ports()[2]
-    mac = None
-    verbose = False
-
-    if len(argv) == 0:
-        print(help_message())
-        sys.exit(0)
-
-    options, _remainder = getopt.getopt(
-        argv, 'm:i:p:vh', ['mac=', 'ip=', 'port=', 'verbose', 'help']
+    parser = argparse.ArgumentParser(
+        prog='wol.py',
+        description=DESCRIPTION,
     )
-    for opt, arg in options:
-        if opt in ('-m', '--mac'):
-            mac = validate_mac(arg)
-        elif opt in ('-i', '--ip'):
-            ip = validate_ip(arg)
-        elif opt in ('-p', '--port'):
-            port = validate_port(arg)
-        elif opt in ('-v', '--verbose'):
-            verbose = True
-        elif opt in ('-h', '--help'):
-            print(help_message())
-            sys.exit(0)
+    parser.add_argument(
+        '-m', '--mac', required=True,
+        help='MAC address (e.g. aa:bb:cc:dd:ee:ff)',
+    )
+    parser.add_argument(
+        '-i', '--ip', default='255.255.255.255',
+        help='Broadcast IP address (default: 255.255.255.255)',
+    )
+    parser.add_argument(
+        '-p', '--port', default=get_wol_ports()[2],
+        help=f'UDP port (default: {get_wol_ports()[2]}, valid: {get_wol_ports()})',
+    )
+    parser.add_argument(
+        '-v', '--verbose', action='store_true',
+        help='Print details before sending',
+    )
 
-    if not mac:
-        print('MAC address is required')
-        print(help_message())
-        sys.exit(0)
+    args = parser.parse_args(argv)
+
+    mac = validate_mac(args.mac)
+    ip = validate_ip(args.ip)
+    port = validate_port(args.port)
+    verbose = args.verbose
 
     return ip, port, mac, verbose
 
