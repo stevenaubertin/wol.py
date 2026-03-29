@@ -6,7 +6,7 @@ A Python 3 CLI that sends the [Wake-on-LAN](https://en.wikipedia.org/wiki/Wake-o
 
 ## Requirements
 
-- Python 3.9+
+- Python 3.9 - 3.13
 - Node.js (for Husky pre-commit hooks)
 
 ## Usage
@@ -24,13 +24,13 @@ python wol.py -m AA:BB:CC:DD:EE:FF
 
 ### Options
 
-| Flag | Description | Default |
-|------|-------------|---------|
-| `-m` | MAC address (required) | — |
-| `-i` | Broadcast IP address | `255.255.255.255` |
-| `-p` | Port (`0`, `7`, or `9`) | `9` |
-| `-v` | Verbose output | off |
-| `-h` | Show help message | — |
+| Flag | Long | Description | Default |
+|------|------|-------------|---------|
+| `-m` | `--mac` | MAC address (required) | â€” |
+| `-i` | `--ip` | Broadcast IP address | `255.255.255.255` |
+| `-p` | `--port` | Port (`0`, `7`, or `9`) | `9` |
+| `-v` | `--verbose` | Verbose output | off |
+| `-h` | `--help` | Show help message | â€” |
 
 ### Examples
 
@@ -38,8 +38,8 @@ python wol.py -m AA:BB:CC:DD:EE:FF
 # Basic usage
 python wol.py -m AA:BB:CC:DD:EE:FF
 
-# Specify broadcast IP and port
-python wol.py -m AA:BB:CC:DD:EE:FF -i 192.168.1.255 -p 7
+# Long option names
+python wol.py --mac AA:BB:CC:DD:EE:FF --ip 192.168.1.255 --port 7
 
 # Verbose output
 python wol.py -m AA:BB:CC:DD:EE:FF -v
@@ -52,11 +52,13 @@ python wol.py -h
 
 Before sending the magic packet, the following checks are performed:
 
-- **MAC address** — must be six colon-separated hex octets (e.g. `AA:BB:CC:DD:EE:FF`)
-- **IP address** — must be a valid IPv4 address
-- **Port** — must be one of `0`, `7`, or `9`
+- **MAC address** â€” must be six colon-separated hex octets (e.g. `AA:BB:CC:DD:EE:FF`)
+- **IP address** â€” must be a valid IPv4 address
+- **Port** â€” must be one of `0`, `7`, or `9`
 
 Invalid inputs raise a clear error message and the packet is not sent.
+
+If the magic packet cannot be delivered (e.g. network error), the program prints an error and exits with code `1`.
 
 ## Development
 
@@ -95,8 +97,8 @@ python -m flake8 . --exclude=.venv,node_modules
 
 Husky runs the following checks before each commit:
 
-1. **flake8** — blocks on syntax errors and undefined names
-2. **pytest** — blocks if any test fails
+1. **flake8** â€” blocks on syntax errors and undefined names
+2. **pytest** â€” blocks if any test fails
 
 ## License
 
