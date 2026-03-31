@@ -243,6 +243,25 @@ class TestParseArgs:
         ip, port, mac, verbose = parse_args(["--mac", MAC_LOWER, "--verbose"])
         assert verbose is True
 
+    def test_long_help_option(self):
+        with pytest.raises(SystemExit) as exc_info:
+            parse_args(["--help"])
+        assert exc_info.value.code == 0
+
+    def test_help_output_contains_description(self, capsys):
+        with pytest.raises(SystemExit):
+            parse_args(["-h"])
+        captured = capsys.readouterr()
+        assert "Wake-on-LAN" in captured.out
+
+    def test_help_output_lists_all_options(self, capsys):
+        with pytest.raises(SystemExit):
+            parse_args(["-h"])
+        captured = capsys.readouterr()
+        for flag in ["-m", "--mac", "-i", "--ip", "-p", "--port",
+                     "-v", "--verbose", "-h", "--help"]:
+            assert flag in captured.out
+
 
 class TestSend:
     def test_sends_payload(self):
